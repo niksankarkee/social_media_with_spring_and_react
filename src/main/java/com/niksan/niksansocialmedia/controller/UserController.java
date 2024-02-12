@@ -29,10 +29,7 @@ public class UserController {
        return userService.findUserById(id);
     }
 
-    @PostMapping("users")
-    public User createUser(@RequestBody User user){
-        return userService.registerUser(user);
-    }
+
 
     @PutMapping("api/users/{userId}")
     public User updateUser(@RequestBody  User user, @PathVariable Integer  userId) throws Exception{
