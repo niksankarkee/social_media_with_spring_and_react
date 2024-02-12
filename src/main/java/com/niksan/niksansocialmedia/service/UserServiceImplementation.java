@@ -1,5 +1,6 @@
 package com.niksan.niksansocialmedia.service;
 
+import com.niksan.niksansocialmedia.config.JwtProvider;
 import com.niksan.niksansocialmedia.models.User;
 import com.niksan.niksansocialmedia.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,17 +41,17 @@ public class UserServiceImplementation implements UserService{
     }
 
     @Override
-    public User followUser(Integer firstUserId, Integer secondUserId) throws Exception {
-        User firstUser = findUserById(firstUserId);
+    public User followUser(Integer reqUserId, Integer secondUserId) throws Exception {
+        User reqUser = findUserById(reqUserId);
         User secondUser = findUserById(secondUserId);
 
-        secondUser.getFollowers().add(firstUser.getId());
-        firstUser.getFollowings().add(secondUser.getId());
+        secondUser.getFollowers().add(reqUser.getId());
+        reqUser.getFollowings().add(secondUser.getId());
 
-        userRepository.save(firstUser);
+        userRepository.save(reqUser);
         userRepository.save(secondUser);
 
-        return firstUser;
+        return reqUser;
     }
 
     @Override
@@ -71,5 +72,13 @@ public class UserServiceImplementation implements UserService{
     @Override
     public List<User> searchUser(String query) {
         return userRepository.searchUser(query);
+    }
+
+    @Override
+    public User findUserByJwt(String jwt) {
+        String email = JwtProvider.getEmailFromJwtToken(jwt);
+
+       return userRepository.findByEmail(email);
+
     }
 }
