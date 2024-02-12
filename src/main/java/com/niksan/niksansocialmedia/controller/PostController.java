@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
+@RequestMapping("/api")
 public class PostController {
 
     private PostService postService;
@@ -23,7 +24,7 @@ public class PostController {
         this.userService = userService;
     }
 
-    @PostMapping("api/posts")
+    @PostMapping("posts")
     public ResponseEntity<Post> createPost(@RequestHeader("Authorization") String jwt, @RequestBody Post post) throws Exception {
         User reqUser = userService.findUserByJwt(jwt);
         return new ResponseEntity<>(postService.createNewPost(post, reqUser.getId()), HttpStatus.CREATED) ;
