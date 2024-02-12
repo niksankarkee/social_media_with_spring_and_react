@@ -1,8 +1,7 @@
 package com.niksan.niksansocialmedia.models;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import jakarta.persistence.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,6 +12,7 @@ import java.util.List;
 public class User {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer id;
 
     private String firstName;
@@ -29,13 +29,15 @@ public class User {
 
     private List<Integer> followings = new ArrayList<>();
 
-
+    @JsonIgnore
+    @ManyToMany
+    private List<Post> savedPost = new ArrayList<>();
 
     public User() {
     }
 
 
-    public User(Integer id, String firstName, String lastName, String email, String password, String gender, List<Integer> followers, List<Integer> followings) {
+    public User(Integer id, String firstName, String lastName, String email, String password, String gender, List<Integer> followers, List<Integer> followings, List<Post> savedPost) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -44,10 +46,19 @@ public class User {
         this.gender = gender;
         this.followers = followers;
         this.followings = followings;
+        this.savedPost = savedPost;
     }
 
     public String getGender() {
         return gender;
+    }
+
+    public List<Post> getSavedPost() {
+        return savedPost;
+    }
+
+    public void setSavedPost(List<Post> savedPost) {
+        this.savedPost = savedPost;
     }
 
     public void setGender(String gender) {
