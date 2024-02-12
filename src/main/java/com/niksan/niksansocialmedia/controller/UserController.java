@@ -19,12 +19,12 @@ public class UserController {
     @Autowired
     UserService userService;
 
-    @GetMapping("users")
+    @GetMapping("/api/users")
     public List<User> getUsers(){
         return userRepository.findAll();
     }
 
-    @GetMapping("users/{userId}")
+    @GetMapping("api/users/{userId}")
     public User getUserById(@PathVariable("userId") Integer id) throws Exception{
        return userService.findUserById(id);
     }
@@ -34,12 +34,12 @@ public class UserController {
         return userService.registerUser(user);
     }
 
-    @PutMapping("users/{userId}")
+    @PutMapping("api/users/{userId}")
     public User updateUser(@RequestBody  User user, @PathVariable Integer  userId) throws Exception{
         return userService.updateUser(user, userId);
     }
 
-    @DeleteMapping("users/{userId}")
+    @DeleteMapping("api/users/{userId}")
     public String deleteUser(@PathVariable Integer userId) throws Exception{
         User delete =
                 userRepository.findById(userId).orElseThrow(() -> new Exception("User not exist with id " + userId));
