@@ -1,5 +1,6 @@
 package com.niksan.niksansocialmedia.controller;
 
+import com.niksan.niksansocialmedia.exceptions.UserException;
 import com.niksan.niksansocialmedia.models.User;
 import com.niksan.niksansocialmedia.repository.UserRepository;
 import com.niksan.niksansocialmedia.service.UserService;
@@ -25,26 +26,26 @@ public class UserController {
     }
 
     @GetMapping("api/users/{userId}")
-    public User getUserById(@PathVariable("userId") Integer id) throws Exception{
+    public User getUserById(@PathVariable("userId") Integer id) throws UserException {
        return userService.findUserById(id);
     }
 
     @PutMapping("api/users")
-    public User updateUser(@RequestHeader("Authorization") String jwt, @RequestBody  User user) throws Exception{
+    public User updateUser(@RequestHeader("Authorization") String jwt, @RequestBody  User user) throws UserException{
         User reqUser = userService.findUserByJwt(jwt);
         return userService.updateUser(user, reqUser.getId());
     }
 
     @DeleteMapping("api/users/{userId}")
-    public String deleteUser(@PathVariable Integer userId) throws Exception{
+    public String deleteUser(@PathVariable Integer userId) throws UserException{
         User delete =
-                userRepository.findById(userId).orElseThrow(() -> new Exception("User not exist with id " + userId));
+                userRepository.findById(userId).orElseThrow(() -> new UserException("User not exist with id " + userId));
         userRepository.delete(delete);
         return "User deleted successfully!! " + userId;
     }
 
     @PutMapping("api/users/follow/{userId2}")
-    public User followUserHandler(@RequestHeader("Authorization") String jwt , @PathVariable Integer userId2) throws  Exception{
+    public User followUserHandler(@RequestHeader("Authorization") String jwt , @PathVariable Integer userId2) throws  UserException{
         User reqUser = userService.findUserByJwt(jwt);
         return userService.followUser(reqUser.getId(), userId2);
     }

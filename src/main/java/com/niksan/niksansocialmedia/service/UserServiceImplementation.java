@@ -1,6 +1,7 @@
 package com.niksan.niksansocialmedia.service;
 
 import com.niksan.niksansocialmedia.config.JwtProvider;
+import com.niksan.niksansocialmedia.exceptions.UserException;
 import com.niksan.niksansocialmedia.models.User;
 import com.niksan.niksansocialmedia.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,12 +28,12 @@ public class UserServiceImplementation implements UserService{
     }
 
     @Override
-    public User findUserById(Integer userId) throws Exception{
+    public User findUserById(Integer userId) throws UserException{
         Optional<User> user = userRepository.findById(userId);
         if(user.isPresent()){
             return user.get();
         }
-        throw new Exception("User not exist with userid: " + userId);
+        throw new UserException("User not exist with userid: " + userId);
     }
 
     @Override
@@ -41,7 +42,7 @@ public class UserServiceImplementation implements UserService{
     }
 
     @Override
-    public User followUser(Integer reqUserId, Integer secondUserId) throws Exception {
+    public User followUser(Integer reqUserId, Integer secondUserId) throws UserException {
         User reqUser = findUserById(reqUserId);
         User secondUser = findUserById(secondUserId);
 
@@ -55,10 +56,10 @@ public class UserServiceImplementation implements UserService{
     }
 
     @Override
-    public User updateUser(User user, Integer userId) throws Exception {
+    public User updateUser(User user, Integer userId) throws UserException {
 
         User updateUser =
-                userRepository.findById(userId).orElseThrow(() -> new Exception("User not exist with id " + userId));
+                userRepository.findById(userId).orElseThrow(() -> new UserException("User not exist with id " + userId));
 
         updateUser.setFirstName(user.getFirstName());
         updateUser.setLastName(user.getLastName());
